@@ -1,24 +1,28 @@
-#include <Servo.h> // Incluimos la biblioteca Servo
+/* Controlar el ángulo de rotación con un potenciómetro. */
 
-Servo servo_1;  // Definimos los servos que vamos a utilizar
+#include <Servo.h>  // librería para poder controlar el servo
 
-int potenciometro_1 = 0;  // Pin usado para conectar el potenciómeto
-int valor_potenciometro_1;    // Esta variable define la posición del servo
+Servo servoMotor;   // Crea un objeto servo llamado servoMotor
+
+const int pinPotenc = 0;
+const int pinServo = 2;
+const int pulsoMin = 650;   // pulso para girar el servo a 0º
+const int pulsoMax = 2550;  // pulso para girar el servo a 180º
+int valor;
+int angulo;
+
 
 void setup() {
-servo_1.attach(9);  // Difinimos el pines de señal para el servo
+  Serial.begin(9600);
+  servoMotor.attach(pinServo, pulsoMin, pulsoMax);
 }
 
+
 void loop() {
-  
-valor_potenciometro_1 = analogRead(potenciometro_1);
-// leemose valor del potenciometro (valor entre 0 y 1023)
-
-valor_potenciometro_1 = map(valor_potenciometro_1, 0, 1023, 0, 180);
-// valor proporcional a la escala del servomotor (valor entre 0 y 180)
-
-servo_1.write(valor_potenciometro_1);
-
-delay(10);
-// Esperamos para reiniciar el bucle
+  valor = analogRead(pinPotenc);
+  angulo = map(valor, 0, 1023, 0, 180);
+  servoMotor.write(angulo);
+  Serial.print("Angulo:  ");
+  Serial.println(angulo);
+  delay(20);
 }
